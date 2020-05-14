@@ -124,7 +124,7 @@ func defineHttp(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	listenAddr := ":" + s.Getenv("PORT")
+	listenAddr := ":" + os.Getenv("PORT")
 	if listenAddr == "" {
 		listenAddr = ":8080"
 	}
