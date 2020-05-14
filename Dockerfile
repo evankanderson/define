@@ -3,6 +3,7 @@ RUN mkdir /build
 ADD . /build/
 WORKDIR /build
 RUN go build -o server .
+
 FROM alpine
 RUN adduser -S -D -H -h /app appuser
 USER appuser

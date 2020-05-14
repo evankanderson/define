@@ -35,7 +35,7 @@ var (
 	<h2>{{.Word}}</h2>
 	<ol>
 	{{range .Definition}}
-		<li><em>{{.}}</em>
+		<li><blink>{{.}}</blink>
 	{{end}}
 	</ol>
 	{{end}}
