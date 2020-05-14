@@ -23,7 +23,12 @@ var (
 	src     source.Source
 	httpTop = template.Must(template.New("body").Parse(`
 <html>
-	<head><title>Define</title></head>
+	<head>
+		<title>Define</title>
+		<style>
+			li { padding-bottom: 1em; }
+		</style>
+	</head>
 	<body>
 	<h1>Define!</h1>
 	<form method="get" action="/define">
