@@ -70,14 +70,14 @@ func init() {
 		PreferredSource: oxford.JSONKey,
 	})
 	if err != nil {
-		fmt.Printf("Failed to configure: %w\n", err)
+		fmt.Printf("Failed to configure: %s\n", err)
 		os.Exit(1)
 	}
 	registry.Finalize(providerList...)
 
 	src, err = registry.ProvidePreferred(conf.PreferredSource, providerList)
 	if err != nil {
-		fmt.Printf("Failed fetch preferred provider: %w\n", err)
+		fmt.Printf("Failed fetch preferred provider: %s\n", err)
 		os.Exit(1)
 	}
 }
@@ -90,7 +90,7 @@ func handle(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func defineHttp(w http.ResponseWriter, req *http.Request) {
+func defineHTTP(w http.ResponseWriter, req *http.Request) {
 	result := struct {
 		Word       string
 		Definition []string
@@ -135,7 +135,7 @@ func main() {
 	}
 
 	http.HandleFunc("/", handle)
-	http.HandleFunc("/define", defineHttp)
+	http.HandleFunc("/define", defineHTTP)
 
 	fmt.Printf("Listening on %s\n", listenAddr)
 	http.ListenAndServe(listenAddr, nil)
