@@ -124,7 +124,7 @@ func defineHttp(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	listenAddr := os.Getenv("PORT")
+	listenAddr := ":" + s.Getenv("PORT")
 	if listenAddr == "" {
 		listenAddr = ":8080"
 	}
@@ -132,6 +132,6 @@ func main() {
 	http.HandleFunc("/", handle)
 	http.HandleFunc("/define", defineHttp)
 
-	fmt.Printf("Listening on %d\n", listenAddr)
+	fmt.Printf("Listening on %s\n", listenAddr)
 	http.ListenAndServe(listenAddr, nil)
 }

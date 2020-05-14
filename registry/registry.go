@@ -133,7 +133,11 @@ func ProvidePreferred(preferredProvider string, confs []Configuration) (source.S
 		return nil, errors.New("no configurations available to provide a source")
 	}
 
-	fmt.Printf("Checking %d confs: %+v\n", len(confs), confs)
+	cn := make([]string, 0, len(confs))
+	for _, c := range confs {
+		cn = append(cn, c.JSONKey())
+	}
+	fmt.Printf("Checking %d confs: %+v\n", len(confs), cn)
 
 	for _, providerConf := range confs {
 		if src == nil || err != nil || preferredProvider == providerConf.JSONKey() {
