@@ -28,7 +28,7 @@ var (
 	<h1>Define!</h1>
 	<form method="get" action="/define">
 		<label for="q">Define</label>
-		<input type="text" id="q" name="q" onchange="this.form.submit()">
+		<input type="text" id="q" name="q" onchange="this.form.submit()" value="{{.Word}}">
 	</form>
 	{{- if .Word}}
 	<hr>
@@ -125,7 +125,7 @@ func defineHttp(w http.ResponseWriter, req *http.Request) {
 
 func main() {
 	listenAddr := ":" + os.Getenv("PORT")
-	if listenAddr == "" {
+	if listenAddr == ":" {
 		listenAddr = ":8080"
 	}
 
