@@ -26,7 +26,7 @@ var (
 	<head>
 		<title>Define</title>
 		<style>
-			li { padding-bottom: 1em; }
+			li { padding-bottom: 1em; font-face: courier; }
 		</style>
 	</head>
 	<body>
@@ -40,7 +40,7 @@ var (
 	<h2>{{.Word}}</h2>
 	<ol>
 	{{range .Definition}}
-		<li><em>{{.}}</em>
+		<li>{{.}}
 	{{end}}
 	</ol>
 	{{end}}
