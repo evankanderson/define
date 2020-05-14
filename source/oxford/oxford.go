@@ -5,6 +5,7 @@ package oxford
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -18,7 +19,7 @@ const Name = "Oxford Dictionaries API"
 
 const (
 	// baseURLString is the base URL for all Oxford API interactions
-	baseURLString = "https://od-api.oxforddictionaries.com/api/v1/"
+	baseURLString = "https://od-api.oxforddictionaries.com/api/v2/"
 
 	entriesURLString = baseURLString + "entries/"
 
@@ -54,20 +55,20 @@ type apiResult struct {
 		Language       string
 		LexicalEntries []struct {
 			DerivativeOf []struct {
-				Domains   []string
-				ID        string
-				Language  string
-				Regions   []string
-				Registers []string
-				Text      string
+				//				Domains   []string
+				ID       string
+				Language string
+				//				Regions   []string
+				//				Registers []string
+				Text string
 			}
 			Derivatives []struct {
-				Domains   []string
-				ID        string
-				Language  string
-				Regions   []string
-				Registers []string
-				Text      string
+				//				Domains   []string
+				ID       string
+				Language string
+				//				Regions   []string
+				//				Registers []string
+				Text string
 			}
 			Entries []struct {
 				Etymologies         []string
@@ -86,21 +87,25 @@ type apiResult struct {
 					Dialects         []string
 					PhoneticNotation string
 					PhoneticSpelling string
-					Regions          []string
+					//					Regions          []string
 				}
-				Senses       []apiSense
-				VariantForms []struct {
-					Regions []string
-					Text    string
-				}
+				Senses []apiSense
+				/*				VariantForms []struct {
+								//					Regions []string
+													Text    string
+												}
+				*/
 			}
 			GrammaticalFeatures []struct {
 				Text string
 				Type string
 			}
 			Language        string
-			LexicalCategory string
-			Notes           []struct {
+			LexicalCategory struct {
+				Id   string
+				Text string
+			}
+			Notes []struct {
 				ID   string
 				Text string
 				Type string
@@ -123,7 +128,7 @@ type apiResult struct {
 			Dialects         []string
 			PhoneticNotation string
 			PhoneticSpelling string
-			Regions          []string
+			//			Regions          []string
 		}
 		Type string
 		Word string
@@ -139,35 +144,35 @@ type apiSense struct {
 		Type string
 	}
 	Definitions []string
-	Domains     []string
-	Examples    []struct {
+	//	Domains     []string
+	Examples []struct {
 		Definitions []string
-		Domains     []string
-		Notes       []struct {
+		// Domains     []string
+		Notes []struct {
 			ID   string
 			Text string
 			Type string
 		}
-		Regions      []string
-		Registers    []string
-		SenseIds     []string
-		Text         string
-		Translations []struct {
-			Domains             []string
-			GrammaticalFeatures []struct {
-				Text string
-				Type string
-			}
-			Language string
-			Notes    []struct {
-				ID   string
-				Text string
-				Type string
-			}
-			Regions   []string
-			Registers []string
-			Text      string
-		}
+		// Regions      []string
+		// Registers    []string
+		SenseIds []string
+		Text     string
+		/*		Translations []struct {
+				Domains             []string
+				GrammaticalFeatures []struct {
+					Text string
+					Type string
+				}
+				Language string
+				Notes    []struct {
+					ID   string
+					Text string
+					Type string
+				}
+				Regions   []string
+				Registers []string
+				Text      string
+			} */
 	}
 	ID    string
 	Notes []struct {
@@ -180,12 +185,12 @@ type apiSense struct {
 		Dialects         []string
 		PhoneticNotation string
 		PhoneticSpelling string
-		Regions          []string
+		// Regions          []string
 	}
-	Regions      []string
-	Registers    []string
-	Subsenses    []apiSense
-	Translations []struct {
+	// Regions      []string
+	// Registers    []string
+	Subsenses []apiSense
+	/*	Translations []struct {
 		Domains             []string
 		GrammaticalFeatures []struct {
 			Text string
@@ -200,11 +205,11 @@ type apiSense struct {
 		Regions   []string
 		Registers []string
 		Text      string
-	}
-	VariantForms []struct {
+	} */
+	/*	VariantForms []struct {
 		Regions []string
 		Text    string
-	}
+	} */
 }
 
 // oxfordEntry is a struct that contains the entry types for this API
@@ -238,7 +243,7 @@ func (g *api) Name() string {
 // Define takes a word string and returns a dictionary source.Result
 func (g *api) Define(word string) (source.Result, error) {
 	// Prepare our URL
-	requestURL, err := url.Parse(entriesURLString + "en/" + word)
+	requestURL, err := url.Parse(entriesURLString + "en-us/" + word)
 
 	if nil != err {
 		return nil, err
@@ -255,6 +260,7 @@ func (g *api) Define(word string) (source.Result, error) {
 	httpRequest.Header.Set(httpRequestAppKeyHeaderName, g.appKey)
 
 	httpResponse, err := g.httpClient.Do(httpRequest)
+	fmt.Printf("Oxford: %+v\n", httpRequest)
 
 	if nil != err {
 		return nil, err
@@ -309,7 +315,7 @@ func (r apiResult) toResult() source.Result {
 		}
 
 		entry.WordVal = lexicalEntry.Text
-		entry.CategoryVal = lexicalEntry.LexicalCategory
+		entry.CategoryVal = lexicalEntry.LexicalCategory.Text
 
 		for _, subEntry := range lexicalEntry.Entries {
 			entry.EtymologyVals = append(entry.EtymologyVals, subEntry.Etymologies...)

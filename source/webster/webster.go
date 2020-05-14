@@ -5,6 +5,7 @@ package webster
 
 import (
 	"encoding/xml"
+	"fmt"
 	"html"
 	"io/ioutil"
 	"net/http"
@@ -184,6 +185,7 @@ func (g *api) Define(word string) (source.Result, error) {
 	httpRequest.Header.Add(httpRequestAcceptHeaderName, xmlBaseMIMEType)
 
 	httpResponse, err := g.httpClient.Do(httpRequest)
+	fmt.Printf("Webster: %+v\n", httpRequest)
 
 	if nil != err {
 		return nil, err

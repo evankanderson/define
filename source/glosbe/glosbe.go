@@ -5,6 +5,7 @@ package glosbe
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -123,6 +124,7 @@ func (g *api) Define(word string) (source.Result, error) {
 	httpRequest.Header.Set(httpRequestAcceptHeaderName, jsonMIMEType)
 
 	httpResponse, err := g.httpClient.Do(httpRequest)
+	fmt.Printf("GLOSBE: %+v\n", httpRequest)
 
 	if nil != err {
 		return nil, err

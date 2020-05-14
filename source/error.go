@@ -30,7 +30,7 @@ type AuthenticationError struct {
 
 // InvalidResponseError represents an error caused by an invalid response
 type InvalidResponseError struct {
-	httpResponse *http.Response
+	HttpResponse *http.Response
 }
 
 // ValidateResult validates the result and returns an error if invalid

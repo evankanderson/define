@@ -133,14 +133,23 @@ func ProvidePreferred(preferredProvider string, confs []Configuration) (source.S
 		return nil, errors.New("no configurations available to provide a source")
 	}
 
+	fmt.Printf("Checking %d confs: %+v\n", len(confs), confs)
+
 	for _, providerConf := range confs {
-		if src == nil || nil != err || preferredProvider == providerConf.JSONKey() {
+		if src == nil || err != nil || preferredProvider == providerConf.JSONKey() {
 			iSrc, iErr := Provide(providerConf)
 
-			if nil != iSrc && nil == iErr {
+			if iSrc != nil && iErr == nil {
 				src, err = iSrc, iErr
 			}
+			if iErr != nil {
+				fmt.Printf("Error with %+v: %+v\n", providerConf, iErr)
+			}
 		}
+	}
+
+	if src == nil && err == nil {
+		err = fmt.Errorf("Unable to provision a source from configs: %+v\n", confs)
 	}
 
 	return src, err
